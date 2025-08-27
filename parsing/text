@@ -1,0 +1,60 @@
+
+
+https://github.com/Glagan/42-cub3d
+https://github.com/l-yohai/cub3d
+https://github.com/ael-bekk/Cub3d-Advanced-Raycasting
+https://github.com/ttranche/cub3D
+https://github.com/iciamyplant/Cub3d-Linux
+https://github.com/gleal42/cub3d
+https://github.com/pulgamecanica/42Course
+https://github.com/Youkass/CUB3D
+https://github.com/eschirni/cub3d
+https://github.com/zmoussam/cub3D-42
+https://github.com/MichaelPerger/cub3d
+https://github.com/pettei47/42_cub3D_error_test
+https://github.com/vittoric/fkngCube
+https://github.com/vitoriagalli/cub3D
+https://github.com/mcombeau/cub3D
+https://github.com/kuvarti/42MainWorks
+https://github.com/osniandrade/42_cub3d
+https://github.com/RubenTeles/Cub3D
+https://github.com/jdecorte-be/42-Cub3d
+https://github.com/llefranc/42_cub3D
+https://github.com/raccoman/cub3d
+https://github.com/jferrer-l/cub3d
+https://github.com/BiancaSantana81/42-cub3D
+https://github.com/abdelkarimhajji/cub3d_42
+https://github.com/paulahemsi/cub3d
+https://github.com/romanmikh/42_cub3D
+https://github.com/adbenoit-9/42_cub3D_tester
+
+
+[ ] File doesn't exist or can't be opened
+[ ] Wrong file extension
+[ ] Empty file
+[ ] File with only whitespace/empty lines
+[ ] Missing required configuration parameters
+[ ] Texture files that don't exist
+[ ] Texture files that can't be read
+[ ] Invalid texture file formats 
+[ ] Invalid RGB color values (not 0-255)
+[ ] Malformed RGB format (missing commas, extra spaces)
+[ ] RGB values with non-numeric characters
+[ ] Configuration lines with invalid identifiers
+[ ] Configuration lines with missing parameters
+[ ] Configuration lines with extra parameters
+[ ] Duplicate configuration lines
+[ ] No player spawn position or multiple spawns
+[ ] Map not closed (player can escape)
+[ ] Invalid characters in map
+[ ] Empty lines within map
+[ ] No map found in file
+[ ] Player spawn position on wall or invalid location
+[ ] No player spawn position
+[ ] Multiple player spawn positions
+[ ] Map with only walls (no playable space)
+[ ] Content after map (non-empty lines after map ends)
+[ ] Configuration parameters appearing after map starts
+[ ] Map appears before all required configuration parameters
+[ ] Configuration parameters appearing after map starts
+[ ] Map too small (less than 3x3)
