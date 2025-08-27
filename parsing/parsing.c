@@ -195,6 +195,7 @@ int main(int argc, char *argv[])
         t_utils *util;
     t_mlx_helper *mlx_utils;
 
+    mlx_utils = malloc(sizeof(t_mlx_helper));
     mlx_utils->player_place = malloc(2 * sizeof(int));
     mlx_utils->map_h_w =  malloc(2 * sizeof(int));
     util = parser(argv[1]);
