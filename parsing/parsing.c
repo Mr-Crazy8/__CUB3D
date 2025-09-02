@@ -210,17 +210,19 @@ void draw_map(t_utils *util, t_mlx_helper *mlx_utils)
                     int screen_x = map_x * scale + px;
                     int screen_y = map_y * scale + py;
 
+              
+
                     if (screen_x < 1000 && screen_y < 1000)
                     {
                         offset = (screen_y * mlx_utils->line_len) + (screen_x * (mlx_utils->bpp / 8));
 
                         if (util->map[map_y][map_x] == '1')
-                            *(int *)(mlx_utils->addr + offset) = 0x8D9797; // Wall
+                            *(int *)(mlx_utils->addr + (offset) ) = 0x8D9797; // Wall
                         else if (util->map[map_y][map_x] == '0')
-                            *(int *)(mlx_utils->addr + offset) = 0x000000; // Floor
+                            *(int *)(mlx_utils->addr + (offset)) = 0x000000; // Floor
                         else if (util->map[map_y][map_x] == 'N' || util->map[map_y][map_x] == 'S' || 
                                 util->map[map_y][map_x] == 'E' || util->map[map_y][map_x] == 'W')
-                            *(int *)(mlx_utils->addr + offset) = 0x008000; // Player
+                            *(int *)(mlx_utils->addr + (offset)) = 0x008000; // Player
                     }
 
                     px++;
@@ -234,7 +236,41 @@ void draw_map(t_utils *util, t_mlx_helper *mlx_utils)
     }
 }
 
+void intit_player(t_mlx_helper *mlx_utils, t_player *player) ====
+{
+    player->pos_x = mlx_utils->player_place[0] + 0.5;
+    player->pos_y =  mlx_utils->player_place[1] + 0.5;
 
+    if (mlx_utils->map[mlx_utils->player_place[0]][mlx_utils->player_place[1]] == 'N')
+    {
+        player->dir_x = -1;
+        player->dir_y = 0;
+        //player->plane_x = 0;
+        //player->plane_y = 0.66;
+    }
+    else if (mlx_utils->map[mlx_utils->player_place[0]][mlx_utils->player_place[1]] == 'S')
+    {
+        player->dir_x = 1;
+        player->dir_y = 0;
+        //player->plane_x = 0;
+        //player->plane_y = -0.66;
+    }
+    else if (mlx_utils->map[mlx_utils->player_place[0]][mlx_utils->player_place[1]] == 'E')
+    {
+        player->dir_x = 0;
+        player->dir_y = 1;
+        //player->plane_x = 0.66;
+        //player->plane_y = 0;
+    }
+    else if (mlx_utils->map[mlx_utils->player_place[0]][mlx_utils->player_place[1]] == 'W')
+    {
+        player->dir_x = 0;
+        player->dir_y = -1;
+        //player->plane_x = -0.66;
+        //player->plane_y = 0;
+    }
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -257,8 +293,9 @@ int main(int argc, char *argv[])
         mlx_utils->img = mlx_new_image(mlx_utils->mlx_ptr, 1000, 1000);
         mlx_utils->addr = mlx_get_data_addr(mlx_utils->img, &mlx_utils->bpp, &mlx_utils->line_len, &mlx_utils->endian);
        find_player(util->map, mlx_utils->player_place);
-       player.pos_x = mlx_utils->player_place[0] * 0.5;
-       player.pos_y =  mlx_utils->player_place[1] * 0.5;
+
+       //init_player(mlx_utils, &player);
+
        //find_h_w_for_map(util->map, mlx_utils->map_h_w);
 
         draw_map(util, mlx_utils);
@@ -267,3 +304,4 @@ int main(int argc, char *argv[])
       mlx_loop( mlx_utils->mlx_ptr);
 
 }
+
