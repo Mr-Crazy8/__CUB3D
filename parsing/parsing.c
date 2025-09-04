@@ -113,19 +113,29 @@ void find_player(t_utils *util, int *player_place)
 {
     int i = 0;
     int j = 0;
+    t_utils *tmp = util;
 
 
-    while (util->map[i])
+
+  
+    while (tmp->map[i])
     {
+   
         j = 0;
-        while (util->map[i][j])
+        while (tmp->map[i][j])
         {
-            if (util->map[i][j] == 'N' || util->map[i][j] == 'S' || util->map[i][j] == 'E' || util->map[i][j] == 'W')
+    
+            if (tmp->map[i][j] == 'N' || tmp->map[i][j] == 'S' || tmp->map[i][j] == 'E' || tmp->map[i][j] == 'W')
                 {
+             
                     player_place[0] = i;
+             
                     player_place[1] = j;
-                    util->player_place[0] = i;
-                    util->player_place[1] = j;
+                   
+                    tmp->player_place[0] = i;
+                
+                    tmp->player_place[1] = j;
+                   
                     break;
                 }
             j++;
@@ -441,24 +451,45 @@ int main(int argc, char *argv[])
     util = parser(argv[1]);
 
    print_config(util);
+   printf("helppppp 0\n");
     mlx_utils->mlx_ptr = mlx_init();
+    printf("helppppp 1\n");
     if (!mlx_utils->mlx_ptr)
         return(write(2, "mlx_init failed\n", 17));
+    printf("helppppp 2\n");
 
        mlx_utils->win = mlx_new_window(mlx_utils->mlx_ptr, 1000, 1000, "cub3D");
+           printf("helppppp 3\n");
         mlx_utils->img = mlx_new_image(mlx_utils->mlx_ptr, 1000, 1000);
+            printf("helppppp 4\n");
+
         mlx_utils->addr = mlx_get_data_addr(mlx_utils->img, &mlx_utils->bpp, &mlx_utils->line_len, &mlx_utils->endian);
+            printf("helppppp 5\n");
+
        find_player(util, mlx_utils->player_place);
+           printf("helppppp 6\n");
+
 
        intit_player(util, &player, mlx_utils);
+
+           printf("helppppp 7\n");
+
         
        //find_h_w_for_map(util->map, mlx_utils->map_h_w);
 
        //draw_map(util, mlx_utils);
     
            cast_rays(&player, util, mlx_utils);
+
+               printf("helppppp 8\n");
+
           mlx_hook(mlx_utils->win, 2, 1L<<0, move, util);
+
+              printf("helppppp 9\n");
+
         mlx_put_image_to_window( mlx_utils->mlx_ptr,  mlx_utils->win,  mlx_utils->img, 0, 0);
+            printf("helppppp 10\n");
+
 
       mlx_loop( mlx_utils->mlx_ptr);
 
