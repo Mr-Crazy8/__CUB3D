@@ -80,7 +80,10 @@ t_utils *parser(char *str)
     util->so_fd = -1;
     util->ea_fd = -1;
     util->we_fd = -1;
+    util->player_place = malloc(2 * sizeof(int));
     util->map = NULL;
+    util->player = NULL;
+    util->mlx_utils = NULL;
 
     fd = check_file(str);
     char **file = read_file(fd, str);
@@ -407,7 +410,11 @@ int move(int keycode, void *util)
 {
     t_utils *info = (t_utils *)util;
 
-    if (keycode == 119) // W key - move forward
+    //w == 13
+    //s == 1
+
+    printf("Key pressed: %d\n", keycode);
+    if (keycode == 13) // W key - move forward
     {
         // Move player forward
 
@@ -415,24 +422,30 @@ int move(int keycode, void *util)
          info->map[info->player_place[0]][info->player_place[1]] = '0';
          info->player_place[1] = info->player_place[1] - 1;
     }
-    else if (keycode == 115) // S key - move backward  
+    else if (keycode == 1) // S key - move backward  
     {
         info->map[info->player_place[0]][info->player_place[1]+1] = info->map[info->player_place[0]][info->player_place[1]];
         info->map[info->player_place[0]][info->player_place[1]] = '0';
         info->player_place[1] = info->player_place[1] + 1;
     }
-    // else if (keycode == 97) // A key - turn left
-    // {
-    //     // Rotate player left
-    // }
-    // else if (keycode == 100) // D key - turn right
-    // {
-    //     // Rotate player right
-    // }
-    // else if (keycode == 65307) // ESC key
-    // {
-    //     exit(0); // Quit the game
-    // }
+    else if (keycode == 0) // A key - turn left
+    {
+          info->map[info->player_place[0]+1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
+        info->map[info->player_place[0]][info->player_place[1]] = '0';
+        info->player_place[0] = info->player_place[0] + 1;
+    }
+    else if (keycode == 2) // D key - turn right
+    {
+        info->map[info->player_place[0]-1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
+        info->map[info->player_place[0]][info->player_place[1]] = '0';
+        info->player_place[0] = info->player_place[0] - 1;
+    }
+    else if (keycode == 53) // ESC key
+    {
+        exit(0); // Quit the game
+    }
+    cast_rays(info->player, info, info->mlx_utils);
+    mlx_put_image_to_window(info->mlx_utils->mlx_ptr, info->mlx_utils->win, info->mlx_utils->img, 0, 0);
     return 0;
 }
 
@@ -444,35 +457,36 @@ int main(int argc, char *argv[])
         t_player player;
     
     mlx_utils = malloc(sizeof(t_mlx_helper));
-      util = malloc(sizeof(util));
+
     mlx_utils->player_place = malloc(2 * sizeof(int));
-    util->player_place = malloc(2 * sizeof(int));
+   
     mlx_utils->map_h_w =  malloc(2 * sizeof(int));
     util = parser(argv[1]);
 
    print_config(util);
-   printf("helppppp 0\n");
+
     mlx_utils->mlx_ptr = mlx_init();
-    printf("helppppp 1\n");
+   
     if (!mlx_utils->mlx_ptr)
         return(write(2, "mlx_init failed\n", 17));
-    printf("helppppp 2\n");
+   
 
        mlx_utils->win = mlx_new_window(mlx_utils->mlx_ptr, 1000, 1000, "cub3D");
-           printf("helppppp 3\n");
+          
         mlx_utils->img = mlx_new_image(mlx_utils->mlx_ptr, 1000, 1000);
-            printf("helppppp 4\n");
+         
 
         mlx_utils->addr = mlx_get_data_addr(mlx_utils->img, &mlx_utils->bpp, &mlx_utils->line_len, &mlx_utils->endian);
-            printf("helppppp 5\n");
+        
 
        find_player(util, mlx_utils->player_place);
-           printf("helppppp 6\n");
+          
 
 
        intit_player(util, &player, mlx_utils);
 
-           printf("helppppp 7\n");
+    util->mlx_utils = mlx_utils;
+    util->player = &player;
 
         
        //find_h_w_for_map(util->map, mlx_utils->map_h_w);
@@ -481,14 +495,14 @@ int main(int argc, char *argv[])
     
            cast_rays(&player, util, mlx_utils);
 
-               printf("helppppp 8\n");
+               
 
           mlx_hook(mlx_utils->win, 2, 1L<<0, move, util);
 
-              printf("helppppp 9\n");
+             
 
         mlx_put_image_to_window( mlx_utils->mlx_ptr,  mlx_utils->win,  mlx_utils->img, 0, 0);
-            printf("helppppp 10\n");
+            
 
 
       mlx_loop( mlx_utils->mlx_ptr);

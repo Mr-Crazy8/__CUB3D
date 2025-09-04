@@ -8,6 +8,21 @@
 #include <stdlib.h>
 #include <math.h>
 
+typedef struct s_mlx_helper
+{
+    void *mlx_ptr;
+    void *win;
+    void *img;
+    char *addr;
+    int bpp;
+    int line_len;
+    int endian;
+    int tail;
+    int *player_place;
+    int *map_h_w;
+
+} t_mlx_helper;
+
 typedef struct s_player {
     double pos_x;
     double pos_y;
@@ -27,22 +42,10 @@ typedef struct s_utils
     int ea_fd;
     int we_fd;
     int *player_place;
+    t_mlx_helper *mlx_utils;
+    t_player *player;
 }	t_utils;
 
-typedef struct s_mlx_helper
-{
-    void *mlx_ptr;
-    void *win;
-    void *img;
-    char *addr;
-    int bpp;
-    int line_len;
-    int endian;
-    int tail;
-    int *player_place;
-    int *map_h_w;
-
-} t_mlx_helper;
 
 
 
