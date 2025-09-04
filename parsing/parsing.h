@@ -6,7 +6,7 @@
 #include <mlx.h>
 #include <string.h> 
 #include <stdlib.h>
-
+#include <math.h>
 
 typedef struct s_player {
     double pos_x;
@@ -26,6 +26,7 @@ typedef struct s_utils
     int so_fd;
     int ea_fd;
     int we_fd;
+    int *player_place;
 }	t_utils;
 
 typedef struct s_mlx_helper
