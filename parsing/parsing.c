@@ -276,7 +276,13 @@ void cast_rays(t_player *player, t_utils *util, t_mlx_helper *mlx_utils)
     int line_height;        
     int draw_start; 
     int offset;        
-    int draw_end;          
+    int draw_end; 
+    int map_width;
+    int map_height;
+
+    map_height = util->mlx_utils->map_h_w[0];
+    map_width = util->mlx_utils->map_h_w[1];
+
 
     //ray_direction = player_direction + camera_plane * camera_coordinate
     x = 0;
@@ -329,7 +335,11 @@ void cast_rays(t_player *player, t_utils *util, t_mlx_helper *mlx_utils)
                 side = 1;
       
             }
-            if (util->map[map_y][map_x] == '1')
+           if (map_x < 0 || map_x >= map_width || map_y < 0 || map_y >= map_height)
+            {
+                hit = 1; 
+            }
+            else if (util->map[map_y][map_x] == '1')
                 hit = 1;
         }
 
@@ -410,40 +420,52 @@ int move(int keycode, void *util)
 {
     t_utils *info = (t_utils *)util;
 
-    //w == 13
-    //s == 1
-
     printf("Key pressed: %d\n", keycode);
-    if (keycode == 13) // W key - move forward
+    
+    
+    if (keycode == 13) // W key - move UP
     {
-        // Move player forward
-
-        info->map[info->player_place[0]][info->player_place[1]-1] = info->map[info->player_place[0]][info->player_place[1]];
-         info->map[info->player_place[0]][info->player_place[1]] = '0';
-         info->player_place[1] = info->player_place[1] - 1;
+        if (info->map[info->player_place[0] - 1][info->player_place[1]] != '1')
+        {
+            info->map[info->player_place[0] - 1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
+            info->map[info->player_place[0]][info->player_place[1]] = '0';
+            info->player_place[0] = info->player_place[0] - 1;
+        }
     }
-    else if (keycode == 1) // S key - move backward  
+    else if (keycode == 1) // S key - move DOWN
     {
-        info->map[info->player_place[0]][info->player_place[1]+1] = info->map[info->player_place[0]][info->player_place[1]];
-        info->map[info->player_place[0]][info->player_place[1]] = '0';
-        info->player_place[1] = info->player_place[1] + 1;
+        if (info->map[info->player_place[0] + 1][info->player_place[1]] != '1')
+        {
+            info->map[info->player_place[0] + 1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
+            info->map[info->player_place[0]][info->player_place[1]] = '0';
+            info->player_place[0] = info->player_place[0] + 1;
+        }
     }
-    else if (keycode == 0) // A key - turn left
+    else if (keycode == 0) // A key - move LEFT
     {
-          info->map[info->player_place[0]+1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
-        info->map[info->player_place[0]][info->player_place[1]] = '0';
-        info->player_place[0] = info->player_place[0] + 1;
+        if (info->map[info->player_place[0]][info->player_place[1] - 1] != '1')
+        {
+            info->map[info->player_place[0]][info->player_place[1] - 1] = info->map[info->player_place[0]][info->player_place[1]];
+            info->map[info->player_place[0]][info->player_place[1]] = '0';
+            info->player_place[1] = info->player_place[1] - 1;
+        }
     }
-    else if (keycode == 2) // D key - turn right
+    else if (keycode == 2) // D key - move RIGHT
     {
-        info->map[info->player_place[0]-1][info->player_place[1]] = info->map[info->player_place[0]][info->player_place[1]];
-        info->map[info->player_place[0]][info->player_place[1]] = '0';
-        info->player_place[0] = info->player_place[0] - 1;
+        if (info->map[info->player_place[0]][info->player_place[1] + 1] != '1')
+        {
+            info->map[info->player_place[0]][info->player_place[1] + 1] = info->map[info->player_place[0]][info->player_place[1]];
+            info->map[info->player_place[0]][info->player_place[1]] = '0';
+            info->player_place[1] = info->player_place[1] + 1;
+        }
     }
-    else if (keycode == 53) // ESC key
+    else if (keycode == 53)
     {
-        exit(0); // Quit the game
+        exit(0);
     }
+    
+    info->player->pos_x = info->player_place[0] + 0.5;
+    info->player->pos_y = info->player_place[1] + 0.5;
     cast_rays(info->player, info, info->mlx_utils);
     mlx_put_image_to_window(info->mlx_utils->mlx_ptr, info->mlx_utils->win, info->mlx_utils->img, 0, 0);
     return 0;
@@ -456,17 +478,18 @@ int main(int argc, char *argv[])
     t_mlx_helper *mlx_utils;
         t_player player;
     
+ 
     mlx_utils = malloc(sizeof(t_mlx_helper));
 
     mlx_utils->player_place = malloc(2 * sizeof(int));
    
     mlx_utils->map_h_w =  malloc(2 * sizeof(int));
     util = parser(argv[1]);
-
+    
    print_config(util);
 
     mlx_utils->mlx_ptr = mlx_init();
-   
+    
     if (!mlx_utils->mlx_ptr)
         return(write(2, "mlx_init failed\n", 17));
    
@@ -481,24 +504,25 @@ int main(int argc, char *argv[])
 
        find_player(util, mlx_utils->player_place);
           
-
+    printf("heeeelp 1\n");
 
        intit_player(util, &player, mlx_utils);
+       printf("heeeelp 2\n");
 
     util->mlx_utils = mlx_utils;
     util->player = &player;
 
         
-       //find_h_w_for_map(util->map, mlx_utils->map_h_w);
+       find_h_w_for_map(util->map, mlx_utils->map_h_w);
 
        //draw_map(util, mlx_utils);
-    
-           cast_rays(&player, util, mlx_utils);
-
+        printf("heeeelp 3\n");
+          cast_rays(&player, util, mlx_utils);
+        printf("heeeelp 4\n");
                
 
           mlx_hook(mlx_utils->win, 2, 1L<<0, move, util);
-
+        printf("heeeelp 5\n");
              
 
         mlx_put_image_to_window( mlx_utils->mlx_ptr,  mlx_utils->win,  mlx_utils->img, 0, 0);
